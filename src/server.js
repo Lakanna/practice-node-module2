@@ -15,9 +15,9 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
 
-  app.use('/products', getAllProductsController);
+  app.get('/products', getAllProductsController);
 
-  app.use('/products/:productId', getProductByIdController);
+  app.get('/products/:productId', getProductByIdController);
 
   app.use('*/*', (req, res, _next) => {
     res.status(404).json({ status: 404, message: 'Route not found' });
