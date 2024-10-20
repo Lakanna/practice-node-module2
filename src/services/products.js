@@ -5,3 +5,13 @@ export const getAllProducts = async () => {
 
   return products;
 };
+
+export const getProductById = async (productId) => {
+  const product = await ProductsCollection.findById(productId);
+
+  //   console.log(product, 'product in services');
+
+  return product;
+};
+
+// 6714fe4f6a15b989ff9584f7
