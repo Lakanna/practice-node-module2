@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import { env } from './utils/env.js';
+import { getAllProductsController } from './controllers/products.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -10,6 +11,8 @@ export const setupServer = () => {
 
   app.use(express.json());
   app.use(cors());
+
+  app.use('/products', getAllProductsController);
 
   app.use('*/*', (req, res, _next) => {
     res.status(404).json({ status: 404, message: 'Route not found' });
