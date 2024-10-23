@@ -2,10 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 import { env } from './utils/env.js';
-import {
-  getAllProductsController,
-  getProductByIdController,
-} from './controllers/products.js';
+import { router } from './routers/products.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -15,12 +12,14 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
 
-  app.get('/products', getAllProductsController);
-
-  app.get('/products/:productId', getProductByIdController);
+  app.use(router);
 
   app.use('*/*', (req, res, _next) => {
     res.status(404).json({ status: 404, message: 'Route not found' });
+  });
+
+  app.use((err, req, res, _next) => {
+    res.status(500).json({ status: 500, message: 'Something went wrong' });
   });
 
   app.listen(PORT, () => {
