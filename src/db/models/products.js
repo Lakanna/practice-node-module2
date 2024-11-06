@@ -12,7 +12,23 @@ const ProductsSchema = new Schema(
     },
     description: { type: String, required: false },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
+
+ProductsSchema.post('save', (err, data, next) => {
+  err.status = 400;
+  next();
+});
+
+ProductsSchema.pre('findOneAndUpdate', function (next) {
+  this.options.runValidators = true;
+  this.options.new = true;
+  next();
+});
+
+ProductsSchema.post('findOneAndUpdate', (err, data, next) => {
+  err.status = 400;
+  next();
+});
 
 export const ProductsCollection = model('products', ProductsSchema);

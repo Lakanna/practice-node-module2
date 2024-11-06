@@ -1,21 +1,50 @@
 import { Router } from 'express';
 import {
   createProductController,
+  deleteProductController,
   getAllProductsController,
   getProductByIdController,
   updateContactController,
   upsertProductController,
 } from '../controllers/products.js';
 import { ctrlCatchErrors } from '../utils/ctrlCatchErrors.js';
+import { validateBody } from '../middlewares/validatebody.js';
+import {
+  createProductShcema,
+  updateProductShcema,
+} from '../validation/products.js';
+import { isValidId } from '../middlewares/isValidId.js';
 
-export const router = Router();
+const router = Router();
 
-router.get('/products', ctrlCatchErrors(getAllProductsController));
+router.get('/', ctrlCatchErrors(getAllProductsController));
 
-router.get('/products/:productId', ctrlCatchErrors(getProductByIdController));
+router.get('/:productId', isValidId, ctrlCatchErrors(getProductByIdController));
 
-router.post('/products', ctrlCatchErrors(createProductController));
+router.post(
+  '/',
+  validateBody(createProductShcema),
+  ctrlCatchErrors(createProductController),
+);
 
-router.patch('/products/:productId', ctrlCatchErrors(updateContactController));
+router.patch(
+  '/:productId',
+  isValidId,
+  validateBody(updateProductShcema),
+  ctrlCatchErrors(updateContactController),
+);
 
-router.put('/products/:productId', ctrlCatchErrors(upsertProductController));
+router.put(
+  '/:productId',
+  isValidId,
+  validateBody(createProductShcema),
+  ctrlCatchErrors(upsertProductController),
+);
+
+router.delete(
+  '/:productId',
+  isValidId,
+  ctrlCatchErrors(deleteProductController),
+);
+
+export default router;

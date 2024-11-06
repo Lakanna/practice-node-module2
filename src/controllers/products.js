@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import {
   createProduct,
+  deleteProduct,
   getAllProducts,
   getProductById,
   updateProduct,
@@ -88,4 +89,17 @@ export const upsertProductController = async (req, res, _next) => {
     message: 'Successfully upsert product',
     data: product.product,
   });
+};
+
+export const deleteProductController = async (req, res) => {
+  const { productId } = req.params;
+  const product = await deleteProduct(productId);
+
+  if (!product)
+    res.status(404).json({
+      status: 404,
+      message: `Product whith id ${req.params} not found`,
+    });
+
+  res.status(204).send();
 };

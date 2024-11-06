@@ -1,4 +1,4 @@
-import { ProductsCollection } from '../db/models.js';
+import { ProductsCollection } from '../db/models/products.js';
 
 export const getAllProducts = async () => {
   const products = await ProductsCollection.find();
@@ -39,3 +39,7 @@ export const updateProduct = async (productId, payload, options = {}) => {
 };
 
 // 6714fe4f6a15b989ff9584f7
+
+export const deleteProduct = async (_id) => {
+  return await ProductsCollection.findOneAndDelete({ _id });
+};
