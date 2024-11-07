@@ -6,9 +6,14 @@ import {
   getProductById,
   updateProduct,
 } from '../services/products.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllProductsController = async (req, res) => {
-  const productsList = await getAllProducts();
+  const { category, minPrice, maxPrice } = parseFilterParams(req.query);
+
+  console.log(category, minPrice, maxPrice, 'query in req');
+
+  const productsList = await getAllProducts({ category, minPrice, maxPrice });
 
   if (!productsList) {
     res.status(404).json({ status: 404, message: 'Products not found' });

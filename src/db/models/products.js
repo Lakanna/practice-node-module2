@@ -15,6 +15,8 @@ const ProductsSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
+export const categoryType = ['books', 'electronics', 'clothing', 'other'];
+
 ProductsSchema.post('save', (err, data, next) => {
   err.status = 400;
   next();
