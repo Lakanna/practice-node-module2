@@ -174,6 +174,7 @@ TASK 3
 name - string, required
 email - string, email, unique, required
 password - string, required
+
 Створіть модель сесії Session з такими полями:
 
 userId - string, required
@@ -182,7 +183,7 @@ refreshToken - string, required
 accessTokenValidUntil - Date, required
 refreshTokenValidUntil - Date, required
 
-Створіть роут POST /users/registerдля реєстрації нового користувача. Тіло запиту має в себе включати наступні властивості:
+Створіть роут POST /users/register для реєстрації нового користувача. Тіло запиту має в себе включати наступні властивості:
 
 name - обов’язково
 email - обов’язково
