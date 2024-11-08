@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { handlerError } from './hooks.js';
 
 const userSchema = new Schema(
   {
@@ -14,5 +15,7 @@ userSchema.methods.toJSON = function () {
   delete obj.password;
   return obj;
 };
+
+userSchema.post('save', handlerError);
 
 export const UsersCollection = model('users', userSchema);

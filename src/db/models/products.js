@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import { handlerError, setValidate } from './hooks.js';
 
 const ProductsSchema = new Schema(
   {
@@ -17,16 +18,9 @@ const ProductsSchema = new Schema(
 
 export const categoryType = ['books', 'electronics', 'clothing', 'other'];
 
-ProductsSchema.post('save', (err, data, next) => {
-  err.status = 400;
-  next();
-});
+ProductsSchema.post('save', handlerError);
 
-ProductsSchema.pre('findOneAndUpdate', function (next) {
-  this.options.runValidators = true;
-  this.options.new = true;
-  next();
-});
+ProductsSchema.pre('findOneAndUpdate', setValidate);
 
 ProductsSchema.post('findOneAndUpdate', (err, data, next) => {
   err.status = 400;

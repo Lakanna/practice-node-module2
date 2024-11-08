@@ -40,7 +40,6 @@ export const updateProduct = async (productId, payload, options = {}) => {
     payload,
     {
       returnDocument: 'after',
-      new: true,
       includeResultMetadata: true,
       ...options,
     },
