@@ -5,6 +5,7 @@ export const createProductShcema = Joi.object({
   price: Joi.number().required(),
   category: Joi.string().valid('books', 'electronics', 'clothing', 'other'),
   description: Joi.string(),
+  userId: Joi.string().required(),
 });
 
 export const updateProductShcema = Joi.object({
@@ -12,4 +13,5 @@ export const updateProductShcema = Joi.object({
   price: Joi.number(),
   category: Joi.string().valid('books', 'electronics', 'clothing', 'other'),
   description: Joi.string(),
+  userId: Joi.string().required(),
 });

@@ -11,11 +11,18 @@ import { parseFilterParams } from '../utils/parseFilterParams.js';
 export const getAllProductsController = async (req, res) => {
   const { category, minPrice, maxPrice } = parseFilterParams(req.query);
 
-  console.log(category, minPrice, maxPrice, 'query in req');
+  const userId = req.user._id;
 
-  const productsList = await getAllProducts({ category, minPrice, maxPrice });
+  const productsList = await getAllProducts(
+    {
+      category,
+      minPrice,
+      maxPrice,
+    },
+    userId,
+  );
 
-  if (!productsList) {
+  if (productsList.length === 0) {
     res.status(404).json({ status: 404, message: 'Products not found' });
   }
 
@@ -28,9 +35,9 @@ export const getAllProductsController = async (req, res) => {
 
 export const getProductByIdController = async (req, res, _next) => {
   const { productId } = req.params;
-  console.log(productId, 'prod id');
+  const userId = req.user._id;
 
-  const product = await getProductById(productId);
+  const product = await getProductById({ productId, userId });
 
   if (!product) {
     res.status(404).json({ status: 404, message: 'Product not found' });
@@ -45,14 +52,15 @@ export const getProductByIdController = async (req, res, _next) => {
 };
 
 export const createProductController = async (req, res, next) => {
-  const body = req.body;
-  console.log(body, 'body in create product');
+  const userId = req.user._id;
+  const payload = req.body;
 
-  const product = await createProduct(body);
+  const product = await createProduct({ payload, userId });
 
   if (!product) {
     const error = createHttpError(404, 'Something went wrong');
     next(error);
+    return;
   }
 
   res.status(201).json({
@@ -64,9 +72,10 @@ export const createProductController = async (req, res, next) => {
 
 export const updateContactController = async (req, res, _next) => {
   const { productId } = req.params;
-  const body = req.body;
+  const payload = req.body;
+  const userId = req.user._id;
 
-  const product = await updateProduct(productId, body);
+  const product = await updateProduct({ productId, payload, userId });
   // console.log(product, 'product in controller');
   if (!product)
     res.status(404).json({
@@ -83,9 +92,13 @@ export const updateContactController = async (req, res, _next) => {
 
 export const upsertProductController = async (req, res, _next) => {
   const { productId } = req.params;
-  const body = req.body;
+  const payload = req.body;
+  const userId = req.user._id;
 
-  const product = await updateProduct(productId, body, { upsert: true });
+  const product = await updateProduct(
+    { productId, payload, userId },
+    { upsert: true },
+  );
 
   const status = product.isNew ? 201 : 200;
 
@@ -98,7 +111,9 @@ export const upsertProductController = async (req, res, _next) => {
 
 export const deleteProductController = async (req, res) => {
   const { productId } = req.params;
-  const product = await deleteProduct(productId);
+  const userId = req.user._id;
+
+  const product = await deleteProduct({ productId, userId });
 
   if (!product)
     res.status(404).json({

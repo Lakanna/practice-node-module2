@@ -14,21 +14,29 @@ import {
   updateProductShcema,
 } from '../validation/products.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
 
-router.get('/', ctrlCatchErrors(getAllProductsController));
+router.get('/', authenticate, ctrlCatchErrors(getAllProductsController));
 
-router.get('/:productId', isValidId, ctrlCatchErrors(getProductByIdController));
+router.get(
+  '/:productId',
+  authenticate,
+  isValidId,
+  ctrlCatchErrors(getProductByIdController),
+);
 
 router.post(
   '/',
+  authenticate,
   validateBody(createProductShcema),
   ctrlCatchErrors(createProductController),
 );
 
 router.patch(
   '/:productId',
+  authenticate,
   isValidId,
   validateBody(updateProductShcema),
   ctrlCatchErrors(updateContactController),
@@ -36,6 +44,7 @@ router.patch(
 
 router.put(
   '/:productId',
+  authenticate,
   isValidId,
   validateBody(createProductShcema),
   ctrlCatchErrors(upsertProductController),
@@ -43,6 +52,7 @@ router.put(
 
 router.delete(
   '/:productId',
+  authenticate,
   isValidId,
   ctrlCatchErrors(deleteProductController),
 );

@@ -12,6 +12,7 @@ const ProductsSchema = new Schema(
       default: 'other',
     },
     description: { type: String, required: false },
+    userId: { type: Schema.Types.ObjectId, ref: 'users' },
   },
   { timestamps: true, versionKey: false },
 );

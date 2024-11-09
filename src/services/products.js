@@ -1,7 +1,7 @@
 import { ProductsCollection } from '../db/models/products.js';
 
-export const getAllProducts = async (filter = {}) => {
-  const productsQuery = ProductsCollection.find();
+export const getAllProducts = async (filter = {}, userId) => {
+  const productsQuery = ProductsCollection.find({ userId });
 
   if (filter.category) {
     productsQuery.where('category').equals(filter.category);
@@ -20,23 +20,26 @@ export const getAllProducts = async (filter = {}) => {
   return products;
 };
 
-export const getProductById = async (productId) => {
-  const product = await ProductsCollection.findById(productId);
+export const getProductById = async ({ productId, userId }) => {
+  const product = await ProductsCollection.findOne({ _id: productId, userId });
 
   //   console.log(product, 'product in services');
 
   return product;
 };
 
-export const createProduct = async (payload) => {
-  const newProduct = await ProductsCollection.create(payload);
+export const createProduct = async ({ payload, userId }) => {
+  const newProduct = await ProductsCollection.create({ ...payload, userId });
 
   return newProduct;
 };
 
-export const updateProduct = async (productId, payload, options = {}) => {
+export const updateProduct = async (
+  { productId, payload, userId },
+  options = {},
+) => {
   const product = await ProductsCollection.findOneAndUpdate(
-    { _id: productId },
+    { _id: productId, userId },
     payload,
     {
       returnDocument: 'after',
@@ -53,6 +56,6 @@ export const updateProduct = async (productId, payload, options = {}) => {
 
 // 6714fe4f6a15b989ff9584f7
 
-export const deleteProduct = async (_id) => {
-  return await ProductsCollection.findOneAndDelete({ _id });
+export const deleteProduct = async ({ productId, userId }) => {
+  return await ProductsCollection.findOneAndDelete({ _id: productId, userId });
 };

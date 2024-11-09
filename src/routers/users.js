@@ -17,7 +17,7 @@ router.post(
 
 router.post(
   '/login',
-  validateBody(loginUserShcema),
+  // validateBody(loginUserShcema),
   ctrlCatchErrors(loginUserController),
 );
 
